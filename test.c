@@ -16,7 +16,6 @@
 #define MOTOR_BOTH     	( MOTOR_LEFT | MOTOR_RIGHT ) /* Bitvis ELLER ger att båda motorerna styrs samtidigt */
 
 int max_hastighet;         /* variabel för max hastighet på motorn */
-POOL_T touchSensor;
 
 int main( void )
 {  
@@ -46,6 +45,13 @@ int main( void )
 	Sleep( 2000 ); 
 	tacho_stop( MOTOR_RIGHT );
 	Sleep( 2000 );
+	tacho_run_forever( MOTOR_LEFT);
+	Sleep( 2000 );
+	tacho_stop( MOTOR_LEFT );
+	
+	tacho_set_speed_sp( MOTOR_BOTH, max_hastighet * -0.5);
+	Sleep( 1000 );
+	tacho_stop( MOTOR_BOTH );
 	
 	
 	brick_uninit();
