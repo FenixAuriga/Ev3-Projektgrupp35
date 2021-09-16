@@ -40,17 +40,18 @@ int main( void )
 	/* Om man vill köra bakåt anger man negativ hastighet, till exempel max_hastighet * (-0.5) */
 	
 	tacho_run_forever(  MOTOR_BOTH );
-	Sleep( 1000 );  
+	Sleep( 2000 );  
 	tacho_stop( MOTOR_LEFT );
-	Sleep( 2000 ); 
+	Sleep( 5000 ); 
 	tacho_stop( MOTOR_RIGHT );
-	Sleep( 2000 );
+	Sleep( 5000 );
 	tacho_run_forever( MOTOR_LEFT);
-	Sleep( 2000 );
+	Sleep( 5000 );
 	tacho_stop( MOTOR_LEFT );
 	
-	tacho_set_speed_sp( MOTOR_BOTH, max_hastighet * -0.5);
-	Sleep( 1000 );
+	tacho_set_speed_sp( MOTOR_BOTH, max_hastighet * -0.5); //åka bakåt//
+	tacho_run_forever( MOTOR_BOTH );
+	Sleep( 2000 );
 	tacho_stop( MOTOR_BOTH );
 	
 	
