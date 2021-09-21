@@ -39,7 +39,7 @@ int main( void )
 	tacho_set_speed_sp( MOTOR_BOTH, max_hastighet * 0.5 );  // Sätter hastigheten på båda motorerna till 50% av maxhastigheten
 	/* Om man vill köra bakåt anger man negativ hastighet, till exempel max_hastighet * (-0.5) */
   
-  	tacho_set_position_sp( MOROR_BOTH, 10);
+  	tacho_set_position_sp( MOTOR_BOTH, 10);
 	
 	tacho_run_to_rel_pos(  MOTOR_BOTH);
 	Sleep( 2000 );  
