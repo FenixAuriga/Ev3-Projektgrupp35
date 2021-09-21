@@ -16,6 +16,8 @@
 #define MOTOR_BOTH     	( MOTOR_LEFT | MOTOR_RIGHT ) /* Bitvis ELLER ger att båda motorerna styrs samtidigt */
 
 int max_hastighet;         /* variabel för max hastighet på motorn */
+int meter = 2080; /* tachometerns counts motsvarar ca 20 per cm */
+int traveled;
 
 int main( void )
 {  
@@ -35,14 +37,20 @@ int main( void )
         return ( 0 );  /* Stänger av sig om motorer ej är inkopplade */
     }
 	
-
+	tacho_set_stop_action_brake( MOTOR_BOTH );
 	tacho_set_speed_sp( MOTOR_BOTH, max_hastighet * 0.5 );  // Sätter hastigheten på båda motorerna till 50% av maxhastigheten
 	/* Om man vill köra bakåt anger man negativ hastighet, till exempel max_hastighet * (-0.5) */
-  
-  	tacho_set_position_sp( MOTOR_BOTH, 10);
 	
-	tacho_run_to_rel_pos(  MOTOR_BOTH);
-	Sleep( 2000 );  
+	tacho_set_position(MOTOR_BOTH, 0);
+  	tacho_set_position_sp( MOTOR_BOTH, 1 * meter); /* en rotation av motorerna motsvarar ca 20cm färd eller ca 20 counts per centimeter */
+	/* printf("%d countperrot \n", rotation);  count_per_rot = 360 för bägge motorer */
+	Sleep( 3000 );
+	
+	
+	tacho_run_to_rel_pos(  MOTOR_BOTH); /* kör från position till position+position_sp */
+	traveled = tacho_get_position_sp(MOTOR_RIGHT, 0);
+	printf("%d counts traveled \n", traveled);
+	Sleep( 4000 );
 	
 	
 	
