@@ -38,24 +38,38 @@ int main( void )
     }
 	
 	if ( sensor_is_plugged ( SENSOR_3, SENSOR_TYPE__NONE_  )) {
-		printf("sensor detekterad i port 2 3\n");
+		printf("sensor detekterad i port 3\n");
 	} else {
 		printf("Anslut sensor i port 3");
 		brick_uninit();
         return ( 0 );  /* Stänger av sig om sensor ej är inkopplad */
     }
+	
+	if ( sensor_is_plugged ( SENSOR_2, SENSOR_TYPE__NONE_  )) {
+		printf("sensor detekterad i port 2\n");
+	} else {
+		printf("Anslut sensor i port 2");
+		brick_uninit();
+        return ( 0 );  /* Stänger av sig om sensor ej är inkopplad */
+    }
+int orientation = sensor_get_value(0, SENSOR_3, 0);
+int gyrovalue0 = orientation -1;
 
-int gyrovalue;
+printf("%d orientation \n", orientation);
+tacho_set_speed_sp ( MOTOR_BOTH, max_hastighet * 0.3 );
   
-  while (gyrovalue < 360) {
-    gyrovalue = sensor_get_value(0, SENSOR_3, 0);
-    printf("%d gyro", gyrovalue);
-  }
+Sleep( 2000);
   
+	while (gyrovalue0 < orientation + 360) {
+		tacho_run_forever(MOTOR_LEFT);
+		gyrovalue0 = sensor_get_value(0, SENSOR_3, 0); // värdet från gyro
+		printf("%d gyro,\n", gyrovalue0);
+	}
+  
+	tacho_stop(MOTOR_BOTH);
   
     
     brick_uninit();
 	printf( "dying...\n" );
     return ( 0 );
-
 }
