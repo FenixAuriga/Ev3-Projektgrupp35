@@ -57,7 +57,7 @@ int main( void )
     int gyrovalue0 = orientation -1;
 
     printf("%d orientation \n", orientation);
-    tacho_set_speed_sp ( MOTOR_BOTH, max_hastighet * 0.3 );
+    tacho_set_speed_sp ( MOTOR_BOTH, max_hastighet * 0.1 );
   
     Sleep( 2000);
 
@@ -83,18 +83,21 @@ int main( void )
 }
 
 void turn(int value){
+	int orientation = sensor_get_value(0, SENSOR_3,0);
+	int gyrovalue0 = orientation -1;
         if(value == 1){
             while (gyrovalue0 < orientation + 90) {
-		        tacho_run_forever(MOTOR_LEFT);
+		        tacho_run_forever(MOTOR_RIGHT);
 		        gyrovalue0 = sensor_get_value(0, SENSOR_3, 0); // värdet från gyro
 		        printf("%d gyro,\n", gyrovalue0);
 	        } 
         }
         if(value == 0){
            while (gyrovalue0 < orientation - 90) {
-		        tacho_run_forever(MOTOR_RIGHT);
+		        tacho_run_forever(MOTOR_LEFT);
 		        gyrovalue0 = sensor_get_value(0, SENSOR_3, 0); // värdet från gyro
 		        printf("%d gyro,\n", gyrovalue0); 
         }
         tacho_stop(MOTOR_BOTH); 
     }
+}
