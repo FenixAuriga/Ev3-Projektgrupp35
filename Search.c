@@ -106,6 +106,8 @@ Sleep( 2000);
 	
 	printf("%d nuvarande orienation, %d mingyro \n", gyrovalue0, gyromindistance);
 	
+	approach_wall();
+	
   
     
     brick_uninit();
