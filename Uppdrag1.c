@@ -17,9 +17,11 @@
 #define MOTOR_BOTH     	( MOTOR_LEFT | MOTOR_RIGHT ) /* Bitvis ELLER ger att båda motorerna styrs samtidigt */
 
 int max_hastighet;
-int turn();
-int Search();
-int approach_wall();
+//int meter = 2080; //2080 counts motsvarar en meters färd
+void turn();
+void Search();
+void approach_wall();
+void drive(float,float);
 
 int main( void )
 
@@ -58,17 +60,17 @@ int main( void )
     int orientation = sensor_get_value(0, SENSOR_3, 0); /* Vad värdet är just nu */
     int gyrovalue0 = orientation -1;
 
-    printf("%d orientation \n", orientation);
     tacho_set_speed_sp ( MOTOR_BOTH, max_hastighet * 0.1 );
   
-    Sleep( 2000);
+    Sleep( 1000);
   
   Search();
   approach_wall();
   turn(1);
-
+  drive(1,2.5);
+  Sleep(12000);
   
-	tacho_stop(MOTOR_BOTH);
+ 
   
     
     brick_uninit();
@@ -76,7 +78,8 @@ int main( void )
     return ( 0 );
 }
 
-int turn(int value){
+void turn(int value){
+	tacho_set_speed_sp ( MOTOR_BOTH, max_hastighet * 0.1 );
 	int orientation = sensor_get_value(0, SENSOR_3,0);
 	int gyrovalue0 = orientation -1;
 	printf("turning %d \n", value);
@@ -98,7 +101,7 @@ int turn(int value){
 		}
         tacho_stop(MOTOR_BOTH); 
     
-  return (0);
+  return;
 }
 
 void Search(){
@@ -112,7 +115,7 @@ int gyromindistance;
 printf("%d orientation \n", orientation);
 tacho_set_speed_sp ( MOTOR_BOTH, max_hastighet * 0.3 );
   
-Sleep( 2000);
+Sleep( 1000);
 
   // Letar efter närmaste vägg
 	while (gyrovalue0 < orientation + 360) {
@@ -132,7 +135,7 @@ Sleep( 2000);
 	
 	printf("Vänd mot min_avstånd");
 	printf("%d minimumdistance, %d gyro \n", mindistance, gyromindistance);
-	Sleep( 3000);
+	Sleep( 1000);
 	
 	tacho_set_speed_sp ( MOTOR_BOTH, max_hastighet * 0.1 );
 	
@@ -152,7 +155,7 @@ Sleep( 2000);
 	
 	tacho_stop(MOTOR_BOTH);
 	
-	printf("%d nuvarande orienation, %d mingyro \n", gyrovalue0, gyromindistance)
+	printf("%d nuvarande orienation, %d mingyro \n", gyrovalue0, gyromindistance);
     
     return;
 }
@@ -177,4 +180,30 @@ void approach_wall() {
 	
 	tacho_stop( MOTOR_BOTH );
   return;
+}
+
+void drive(float value, float distance ) {
+	int meter = 2080;
+	int travel = distance * meter;
+	tacho_set_stop_action_brake( MOTOR_BOTH );
+	tacho_set_speed_sp ( MOTOR_BOTH, max_hastighet * 0.5 );
+	printf("%f travel n",travel);
+	
+	if (value == 1) {
+	printf("framåt \n");
+	}
+	if (value != 1) {
+		travel = -1*travel;
+		printf("Bakåt \n");
+	}
+	// Sätter hastigheten på båda motorerna till 50% av maxhastigheten
+	/* Om man vill köra bakåt anger man negativ hastighet, till exempel max_hastighet * (-0.5) */
+	
+	
+	tacho_set_position(MOTOR_BOTH, 0);
+  	tacho_set_position_sp( MOTOR_BOTH, travel); /* en rotation av motorerna motsvarar ca 20cm färd eller ca 20 counts per centimeter */
+	
+	tacho_run_to_rel_pos(  MOTOR_BOTH ); /* kör från position till position+position_sp */
+	
+    return ;
 }
